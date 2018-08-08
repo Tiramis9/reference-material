@@ -1,0 +1,299 @@
+1. 新建一个 django project
+django-admin.py startproject project_name
+
+2.创建app
+python manage.py startapp app_name
+或 django-admin.py startapp app_name
+
+3. 创建数据库表 或 更改数据库表或字段
+Django 1.7.1及以上 用以下命令
+# 1. 创建更改的文件
+python manage.py makemigrations
+# 2. 将生成的py文件应用到数据库
+python manage.py migrate
+ 
+ 
+旧版本的Django 1.6及以下用
+python manage.py syncdb
+
+4. 使用开发服务器
+
+python manage.py runserver
+ 
+# 当提示端口被占用的时候，可以用其它端口：
+python manage.py runserver 8001
+python manage.py runserver 9999
+（当然也可以kill掉占用端口的进程，具体后面有讲，此处想知道的同学可查下 lsof 命令用法）
+ 
+# 监听机器所有可用 ip （电脑可能有多个内网ip或多个外网ip）
+python manage.py runserver 0.0.0.0:8000
+# 如果是外网或者局域网电脑上可以用其它电脑查看开发服务器
+# 访问对应的 ip加端口，比如 http://172.16.20.2:8000
+
+5. 清空数据库
+python manage.py flush
+
+Models关联查询：图书与英雄一对多的关系，django中提供了关联的操作方式，获得关联集合：返回当前book对象对应的所有的hero
+
+例如：book.heroinfo_set.all()
+
+超级用户
+可以用python manage.py createsuperuser创建
+设置LANGUAGE_CODE = 'zh-Hans'，可以把后台设置成中文
+TIME_ZONE = 'Asia/Shanghai'设置时区
+
+后台界面配置类的管理
+
+注册的方式是：admin.site.register(类名)
+
+自定义管理界面
+例如：
+    class BookInfoAdmin(admin.ModelAdmin):
+        list_display = ['id','btitle','bpub_date']
+    class HerosInfoAdmin(admin.ModelAdmin):
+        list_display = ['id','hname','hgender','hcontent']
+        
+    admin.site.register(BookInfo,BookInfoAdmin)
+    admin.site.register(HerosInfo,HerosInfoAdmin )
+    
+    
+管理界面的设置
+
+    
+
+
+删除数据：h.delete()
+
+在使用数据库之前，需要下载相关驱动
+数据库配置
+我们在项目的 settings.py 文件中找到 DATABASES 配置项，将其信息修改为：
+HelloWorld/HelloWorld/settings.py: 文件代码：
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',  # 或者使用 mysql.connector.django
+        'NAME': 'test',
+        'USER': 'test',
+        'PASSWORD': 'test123',
+        'HOST':'localhost',
+        'PORT':'3306',
+    }
+}
+这里添加了中文注释，所以你需要在 HelloWorld/settings.py 文件头部添加      # -*- coding: UTF-8 -*-。
+上面包含数据库名称和用户的信息，它们与 MySQL 中对应数据库和用户的设置相同。Django 根据这一设置，与 MySQL 中相应的数据库和用户连接起来。
+
+定义模型
+创建 APP
+Django规定，如果要使用模型，必须要创建一个app。我们使用以下命令创建一个 TestModel 的 app:
+django-admin.py startapp TestModel
+
+如果在原来的类上增加字段或者删除字段，可以参考这个命令：
+python manage.py sql appname
+
+url() 函数
+Django url() 可以接收四个参数，分别是两个必选参数：regex、view 和两个可选参数：kwargs、name，接下来详细介绍这四个参数。
+regex: 正则表达式，与之匹配的 URL 会执行对应的第二个参数 view。
+view: 用于执行与正则表达式匹配的 URL 请求。
+kwargs: 视图使用的字典类型的参数。
+name: 用来反向获取 URL。
+from django.conf.urls import url
+ 
+from . import view
+ 
+urlpatterns = [
+    url(r'^$', view.hello),
+]
+
+注意：Django的版本不同的话，这个url也不同
+例如Django 2.0的版本
+    如果你要使用正则的话需要
+    from django.urls import re_path，导入这个模块
+    之前的版本可以直接使用
+    这里添加一个实例
+    https://docs.djangoproject.com/zh-hans/2.0/topics/http/urls/
+    上面的链接是官方讲Django的urls
+
+
+models里面的字段有3个时间相关的
+分别是：
+           DateField:日期，参数auto_now表示自动保存最新的修改日期，默认值是false，参数auto_now_add表示自动保存的时间是创建的日期，默认值是False，两个参数不能同时设置
+           TimeField:时间，参数同DateField
+           DateTimeField:日期和时间，参数同DataField
+
+可以设置自定义的管理器
+例如：book = models.Manage()（这个只是改了一下名字而已）
+用处是可以把查询的数据做个过滤
+
+
+
+
+
+
+
+模板标签
+if/else 标签
+基本语法格式如下：
+{% if condition %}
+     ... display
+{% endif %}
+或者
+{% if condition1 %}
+   ... display 1
+{% elif condition2 %}
+   ... display 2
+{% else %}
+   ... display 3
+{% endif %}
+
+if/else 支持嵌套
+{% if athlete_list and coach_list %}
+     athletes 和 coaches 变量都是可用的。
+{% endif %}
+
+for 标签
+<ul>
+{% for athlete in athlete_list %}
+    <li>{{ athlete.name }}</li>
+{% endfor %}
+</ul>
+
+给标签增加一个 reversed 使得该列表被反向迭代：
+{% for athlete in athlete_list reversed %}
+...
+{% endfor %}
+
+可以嵌套使用 {% for %} 标签：
+{% for athlete in athlete_list %}
+    <h1>{{ athlete.name }}</h1>
+    <ul>
+    {% for sport in athlete.sports_played %}
+        <li>{{ sport }}</li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+
+ifequal/ifnotequal 标签
+{% ifequal %} 标签比较两个值，当他们相等时，显示在 {% ifequal %} 和 {% endifequal %} 之中所有的值。
+下面的例子比较两个模板变量 user 和 currentuser :
+
+{% ifequal user currentuser %}
+    <h1>Welcome!</h1>
+{% endifequal %}
+
+和 {% if %} 类似， {% ifequal %} 支持可选的 {% else%} 标签
+{% ifequal section 'sitenews' %}
+    <h1>Site News</h1>
+{% else %}
+    <h1>No News Here</h1>
+{% endifequal %}
+
+过滤器
+模板过滤器可以在变量被显示前修改它，过滤器使用管道字符，如下所示：
+{{ name|lower }}
+模板过滤器可以被套接
+{{ name|lower|upper }}
+过滤器可以带参数
+{{ bio | truncatewords:"30" }}
+过滤器的参数跟随冒号之后并且总是以双引号包含
+这个将显示变量 bio 的前30个词
+
+其他过滤器：
+addslashes : 添加反斜杠到任何反斜杠、单引号或者双引号前面。
+date : 按指定的格式字符串参数格式化 date 或者 datetime 对象，实例：
+{{ pub_date|date:"F j, Y" }}
+length : 返回变量的长度。
+include 标签
+{% include %} 标签允许在模板中包含其它的模板的内容。
+下面这个例子都包含了 nav.html 模板：
+{% include "nav.html" %}
+
+模板继承
+模板可以用继承的方式来实现复用。
+接下来我们先创建之前项目的 templates 目录中添加 base.html 文件，代码如下：
+HelloWorld/templates/base.html 文件代码：
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+    <p>菜鸟教程 Django 测试。</p>
+    {% block mainbody %}
+       <p>original</p>
+    {% endblock %}
+</body>
+</html>
+以上代码中，名为 mainbody 的 block 标签是可以被继承者们替换掉的部分。
+所有的 {% block %} 标签告诉模板引擎，子模板可以重载这些部分。
+hello.html 中继承 base.html，并替换特定 block，hello.html 修改后的代码如下：
+HelloWorld/templates/hello.html 文件代码：
+{% extends "base.html" %}
+ 
+{% block mainbody %}<p>继承了 base.html 文件</p>
+{% endblock %}
+
+在for循环中还有很多有用的东西，如下：
+变量
+描述
+forloop.counter
+索引从 1 开始算
+forloop.counter0
+索引从 0 开始算
+forloop.revcounter
+索引从最大长度到 1
+forloop.revcounter0
+索引从最大长度到 0
+forloop.first
+当遍历的元素为第一项时为真
+forloop.last
+当遍历的元素为最后一项时为真
+forloop.parentloop
+用在嵌套的 for 循环中， 获取上一层 for 循环的 forloop
+
+当列表中可能为空值时用 for  empty
+<ul>
+{% for athlete in athlete_list %}
+    <li>{{ athlete.name }}</li>
+{% empty %}
+    <li>抱歉，列表为空</li>
+{% endfor %}
+</ul>
+
+get是用来获取一个对象的，如果需要获取满足条件的一些人，就要用到filter
+Person.objects.filter(name="abc") # 等于Person.objects.filter(name__exact="abc") 名称严格等于 "abc" 的人
+Person.objects.filter(name__iexact="abc") # 名称为 abc 但是不区分大小写，可以找到 ABC, Abc, aBC，这些都符合条件
+
+Person.objects.filter(name__contains="abc") # 名称中包含 "abc"的人
+Person.objects.filter(name__icontains="abc") #名称中包含 "abc"，且abc不区分大小写
+
+Person.objects.filter(name__regex="^abc") # 正则表达式查询
+Person.objects.filter(name__iregex="^abc") # 正则表达式不区分大小写
+
+    filter是找出满足条件的，当然也有排除符合某条件的
+Person.objects.exclude(name__contains="WZ") # 排除包含 WZ 的Person对象
+Person.objects.filter(name__contains="abc").exclude(age=23) # 找出名称含有abc, 但是排除年龄是23岁的
+
+    Django中间件中预设了六个方法，这六个方法分别出于不同的阶段执行，对输入输出进行干预，方法如下：
+    1.初始化：无需任何参数，服务器响应第一个请求的时候调用一次，用于确认是否启用当前的中间件
+    def __init__():
+        pass
+    2.处理请求前：在每个请求上调用，返回None或HttpResponse对象
+    def process_request(request):
+        pass
+    3.处理视图前：在每个请求调用前，返回实现了render方法的响应对象
+    def process_view(request,view_func,*view_args,**view_kwargs):
+        pass
+    4.处理模板响应前：在每个请求调用上，返回实现了render的响应方法
+    def process_template_response(request,response):
+        pass
+    5.处理响应后：所有响应返回浏览器之前被调用，在每个请求上调用，返回httpresponse对象
+    def process_response(request,response):
+        pass
+    6.异常处理：当视图抛出异常时调用，在每个请求上调用，返回一个httpresponse对象
+    def process_exception(request,response):
+        pass
+        
+
+
+    

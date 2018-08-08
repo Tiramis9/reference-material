@@ -1,0 +1,76 @@
+
+
+struct sockaddr_ll
+{
+    unsigned short int sll_family;
+    unsigned short int sll_protocol;
+    int sll_ifindex;
+    unsigned short int sll_hatype;
+    unsigned char sll_pkttype;
+    unsigned char sll_halen;
+    unisgned char sll_addr[8];
+}
+sll_ifindex是网络(网卡)接口索引，代表从这个接口收发数据包
+
+网络(网卡)接口数据结构位于net/if.h
+struct ifreq
+{
+# define IFHWADDRLEN    6
+# define IFNAMSIZ    IF_NAMESIZE
+    union
+      {
+    char ifrn_name[IFNAMSIZ];    /* Interface name, e.g. "en0".  */
+      } ifr_ifrn;
+
+    union
+      {
+    struct sockaddr ifru_addr;
+    struct sockaddr ifru_dstaddr;
+    struct sockaddr ifru_broadaddr;
+    struct sockaddr ifru_netmask;
+    struct sockaddr ifru_hwaddr;
+    short int ifru_flags;
+    int ifru_ivalue;
+    int ifru_mtu;
+    struct ifmap ifru_map;
+    char ifru_slave[IFNAMSIZ];    /* Just fits the size */
+    char ifru_newname[IFNAMSIZ];
+    __caddr_t ifru_data;
+      } ifr_ifru;
+};
+
+该结构里面包含2个union，第一个是接口名，如：eth0，wlan0等。可以通过ioctl()函数来获取对应的接口信息，ip地址，mac地址，接口索引等。
+
+以太网首部结构位于net/ethernet.h
+struct ether_header
+{
+  u_int8_t  ether_dhost[ETH_ALEN];    /* destination eth addr    */
+  u_int8_t  ether_shost[ETH_ALEN];    /* source ether addr    */
+  u_int16_t ether_type;                /* packet type ID field    */
+} __attribute__ ((__packed__));
+ether_type帧类型：常见的有IP，ARP，RARP，都有对应的宏定义。
+
+arp包结构位于netinet/if_ether.h
+struct    ether_arp {
+    struct    arphdr ea_hdr;        /* fixed-size header */
+    u_int8_t arp_sha[ETH_ALEN];    /* sender hardware address */
+    u_int8_t arp_spa[4];        /* sender protocol address */
+    u_int8_t arp_tha[ETH_ALEN];    /* target hardware address */
+    u_int8_t arp_tpa[4];        /* target protocol address */
+};
+#define    arp_hrd    ea_hdr.ar_hrd
+#define    arp_pro    ea_hdr.ar_pro
+#define    arp_hln    ea_hdr.ar_hln
+#define    arp_pln    ea_hdr.ar_pln
+#define    arp_op    ea_hdr.ar_op
+上面的ether_arp结构还包含一个arp首部，位于net/if_arp.h
+
+struct arphdr
+{
+    unsigned short int ar_hrd;        /* Format of hardware address.  */
+    unsigned short int ar_pro;        /* Format of protocol address.  */
+    unsigned char ar_hln;        /* Length of hardware address.  */
+    unsigned char ar_pln;        /* Length of protocol address.  */
+    unsigned short int ar_op;        /* ARP opcode (command).  */
+}
+

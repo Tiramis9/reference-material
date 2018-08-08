@@ -1,0 +1,38 @@
+http://www.cnblogs.com/zhangshenghui/p/6094662.html
+ioctl函数的一些作用，网络什么的很好用
+
+https://www.zhihu.com/question/20219414?rf=19935492
+python的一些学习资料
+
+http://blog.csdn.net/hubi0952/article/details/8045094
+一个linux c下面的线程池
+
+http://blog.csdn.net/lisonglisonglisong/article/details/51327695
+linux下的TCP的心跳包示例
+
+http://blog.csdn.net/weiyuefei/article/details/52242890
+epoll边缘触发（ET）和水平触发（LT）的优缺点
+
+http://blog.csdn.net/liang19890820/article/details/50277095
+qt的一些教程（一去两三里）
+
+http://www.cnblogs.com/yuuyuu/p/5164685.html
+linux原是套接字-arp请求与接收
+
+http://blog.csdn.net/xiexievv/article/details/45225921
+TCP/IP/UDP/ICMP/ARP/ethernet 各种协议头部结构体
+
+https://www.cnblogs.com/lifan3a/articles/6649970.html
+以太网帧格式、IP数据报格式、TCP段格式+UDP段格式 详解
+
+http://www.cnblogs.com/zhangshenghui/p/6097492.html
+packet socket 和sockaddr_ll的使用方法
+
+http://blog.csdn.net/u011721501/article/details/40484043
+原始套接字的使用DDOS攻击示例
+
+http://blog.sina.com.cn/s/blog_9c5d29f70101dwgk.html
+以太网数据包TCP、IP、ICMP、UDP、ARP协议头结构详解
+
+http://blog.csdn.net/u011304970/article/details/72995308
+FFmpeg 读取视频流并保存为BMP

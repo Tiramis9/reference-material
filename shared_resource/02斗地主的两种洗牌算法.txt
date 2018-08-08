@@ -1,0 +1,70 @@
+第一种：
+	int total[54];
+	int player[3][17];
+	int count = 54;
+	int randNum;
+
+	int i,j;
+	for(i = 0; i < 54; i++)
+	{
+		total[i] = i + 1;
+	}
+
+	for(i = 0; i < 17; i++)
+	{
+		for(j = 0; j < 3; j++)
+		{
+			srand(time(NULL));
+			randNum = rand() % count;
+			player[j][i] = total[randNum];
+			total[randNum] = total[count - 1];
+			count--;
+		}
+	}
+
+	for(i = 0; i < 3; i++)
+	{
+		for(j = 0; j < 17; j++)
+		{
+			cout << setw(3) << player[i][j];
+		}
+		cout << endl;
+	}
+
+	for(i = 0; i < 3; i++)
+	{
+		cout << setw(3) << total[i];
+	}
+	cout << endl;
+	system("pause");
+	return 0;
+
+第二种：（用的是STL的内置的算法）
+
+	srand(time(NULL));
+	vector<int> v1;
+	int i;
+	for(i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+	}
+
+	random_shuffle(v1.begin(),v1.end());
+
+	for(vector<int>::iterator it = v1.begin(); it != v1.end(); it++)
+	{
+		cout << *it << endl;
+	}
+	system("pause");
+	return 0;
+
+第三种：（个人感觉效率比较底）
+	for(i=1;i<=54;i++){
+		p_deck->arr[i]=rand()%54;
+		for(j=1;j<i;j++){
+			if(p_deck->arr[i]==p_deck->arr[j]){
+				i--;
+				break;
+			}
+		}
+	}
